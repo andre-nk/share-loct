@@ -6,15 +6,14 @@ export default function Users() {
     {
       id: "u1",
       name: "Jesse Pinkman",
-      image:
-        "https://static.wikia.nocookie.net/breakingbad/images/9/95/JesseS5.jpg/revision/latest/scale-to-width-down/700?cb=20120620012441",
+      location: "Albuquerque",
+      image: "https://static.wikia.nocookie.net/breakingbad/images/0/05/Season_2_-_Jesse.jpg",
       places: 3,
     },
   ];
 
   return (
-    <div>
-      <h2>Users Works!</h2>
+    <div className="">
       <UsersList items={USERS} />
     </div>
   );

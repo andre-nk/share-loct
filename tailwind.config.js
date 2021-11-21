@@ -3,6 +3,9 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      scale: {
+        "101": "1.01"
+      },
       margin: {
         "68": "17rem",
         "92": "24.5rem"

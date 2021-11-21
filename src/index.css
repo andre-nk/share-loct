@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap");
 
 body {
   margin: 0;
@@ -13,6 +13,28 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.slide-in-left-enter {
+  opacity: 1;
+  transform: translateX(-100%);
+}
+
+.slide-in-left-enter-active {
+  transform: translateX(0);
+  opacity: 1;
+  transition: all 200ms;
+}
+
+.slide-in-left-exit {
+  transform: translateX(0%);
+  opacity: 1;
+}
+
+.slide-in-left-exit-active {
+  transform: translateX(-100%);
+  opacity: 1;
+  transition: all 200ms;
 }
