@@ -32,7 +32,7 @@ export default function MainNavigation() {
             ? "bg-primary-surface"
             : "bg-white-main shadow-md"
         } w-full px-6 lg:px-10 py-5 flex flex-row-reverse lg:flex-row justify-between items-center`}
-      >
+      >     
         <Link to="/">
           <img src="/logo.svg" alt="logo" />
         </Link>
@@ -43,7 +43,7 @@ export default function MainNavigation() {
           <Link to="/places/new">
             <AiOutlinePlusCircle size={24} />
           </Link>
-          <button className="bg-black-main text-white-main pt-2 pb-2.5 px-7">
+          <button className="bg-black-main text-white-main pt-1.5 pb-2 px-6">
             Log in
           </button>
         </nav>

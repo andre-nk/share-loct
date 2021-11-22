@@ -13,7 +13,7 @@ export default function Users() {
   ];
 
   return (
-    <div className="">
+    <div>
       <UsersList items={USERS} />
     </div>
   );

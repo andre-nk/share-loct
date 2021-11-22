@@ -1,12 +1,19 @@
 import React from "react";
+
+import ErrorState from "../../shared/components/Error/ErrorState";
 import UserItem from "./UserItem";
 
 export default function UsersList(props) {
   if (props.items.length === 0) {
     return (
-      <div>
-        <h2>No users found.</h2>
-      </div>
+      <ErrorState
+        title={"There are currently no users!"}
+        message={"Let's be the first one, yeah?"}
+        btnMessage={"Register now"}
+        onClick={
+          () => {console.log("goodman");}
+        }
+      />
     );
   }
 
