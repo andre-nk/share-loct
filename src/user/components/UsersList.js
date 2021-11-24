@@ -1,6 +1,6 @@
 import React from "react";
 
-import ErrorState from "../../shared/components/Error/ErrorState";
+import ErrorState from "../../shared/pages/Error/ErrorState"
 import UserItem from "./UserItem";
 
 export default function UsersList(props) {

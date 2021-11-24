@@ -11,7 +11,7 @@ export default function Landing() {
         <img src="/stamp.png" alt="stamp" className="hidden lg:block absolute left-0 bottom-12 h-44"/>
         <div className="flex flex-col lg:flex-row w-full h-full lg:h-96 items-center justify-between absolute top-20">
           <div className="mx-8 md:mx-16 flex flex-col items-center lg:block lg:ml-40 mt-12">
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold">
+            <h2 className="text-2xl lg:text-4xl font-serif font-bold">
               Explore new places
             </h2>
             <p className="mt-4 text-center text-md md:text-lg lg:text-left">

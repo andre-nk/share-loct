@@ -5,7 +5,7 @@ import Users from "./user/pages/Users";
 import NewPlace from "./places/pages/NewPlace";
 import UserPlaces from "./places/pages/UserPlaces";
 import MainNavigation from "./shared/components/Navigation/MainNavigation";
-import Landing from "./shared/components/Landing/Landing";
+import Landing from "./shared/pages/Landing/Landing";
 
 function App() {
   return (

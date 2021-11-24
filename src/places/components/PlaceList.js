@@ -1,6 +1,6 @@
 import React from "react";
 
-import ErrorState from "../../shared/components/Error/ErrorState";
+import ErrorState from "../../shared/pages/Error/ErrorState"
 import PlaceItem from "./PlaceItem";
 
 export default function PlaceList(props) {
