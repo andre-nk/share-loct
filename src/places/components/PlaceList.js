@@ -1,9 +1,12 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 
 import ErrorState from "../../shared/pages/Error/ErrorState"
 import PlaceItem from "./PlaceItem";
 
 export default function PlaceList(props) {
+  const history = useHistory();
+
   if (props.items.length === 0) {
     return (
       <ErrorState
@@ -11,7 +14,9 @@ export default function PlaceList(props) {
         message={"What about you? Ready to share another place to the world?"}
         btnMessage={"Create a post now"}
         onClick={
-          () => {console.log("goodman");}
+          () => {
+            history.push("/places/new");
+          }
         }
       />
     );
@@ -20,7 +25,7 @@ export default function PlaceList(props) {
   return (
     <ul>
       {props.items.map((place) => (
-        <li key={place.id}>
+        <li key={place.id} className="mb-12">
           <PlaceItem place={place} />
         </li>
       ))}

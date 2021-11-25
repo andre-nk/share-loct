@@ -1,39 +1,16 @@
-import React, { useCallback, useReducer } from "react";
+import React from "react";
 import { AiOutlinePicture } from "react-icons/ai";
 
+import { useForm } from "../../shared/hooks/form-hook";
 import Input from "../../shared/components/FormElement/Input";
 import {
   VALIDATOR_MAXLENGTH,
   VALIDATOR_REQUIRE,
 } from "../../shared/utils/validators";
 
-const formReducer = (state, action) => {
-  switch (action.type) {
-    case "INPUT_CHANGE":
-      let formIsValid = true;
-      for (const inputId in state.inputs) {
-        if (inputId === action.inputId) {
-          formIsValid = formIsValid && action.isValid;
-        } else {
-          formIsValid = formIsValid && state.inputs[inputId].isValid;
-        }
-      }
-      return {
-        ...state,
-        inputs: {
-          ...state.inputs,
-          [action.inputId]: { value: action.value, isValid: action.isValid },
-        },
-        isValid: formIsValid,
-      };
-    default:
-      return state;
-  }
-};
-
 export default function NewPlace() {
-  const [formState, dispatch] = useReducer(formReducer, {
-    inputs: {
+  const [formState, inputHandler] = useForm(
+    {
       title: {
         value: "",
         isValid: false,
@@ -43,17 +20,8 @@ export default function NewPlace() {
         isValid: false,
       },
     },
-    isValid: false,
-  });
-
-  const inputHandler = useCallback((id, value, isValid) => {
-    dispatch({
-      type: "INPUT_CHANGE",
-      value: value,
-      isValid: isValid,
-      inputId: id,
-    });
-  }, []);
+    false
+  );
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -91,19 +59,22 @@ export default function NewPlace() {
           validators={[VALIDATOR_REQUIRE(), VALIDATOR_MAXLENGTH(1000)]}
           onInput={inputHandler}
         />
-        <p className="border-t text-sm font-medium mx-4 lg:mx-0 border-gray-main pt-3 pb-2">Location's Address:</p>
+        <p className="border-t text-sm font-medium mx-4 lg:mx-0 border-gray-main pt-3 pb-2">
+          Location's Address:
+        </p>
         <Input
           id="address"
           element="input"
+          onInput={inputHandler}
           validators={[VALIDATOR_REQUIRE()]}
           errorMessage={"Please enter a valid address"}
-          onInput={inputHandler}
+          placeholder={"Enter the location's address here..."}
           className="text-sm outline-none px-4 lg:px-0 caret-black w-full pb-3.5"
         />
         <button
           type="submit"
           disabled={!formState.isValid}
-          className="bg-black-main mt-6 py-3 text-white-main disabled:opacity-80"
+          className="bg-black-main mt-6 py-3 text-white-main disabled:opacity-40"
         >
           Create post
         </button>

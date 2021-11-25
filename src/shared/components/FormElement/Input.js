@@ -30,10 +30,12 @@ export default function Input({
   errorMessage,
   validators,
   onInput,
+  inputValue,
+  valid
 }) {
   const [inputState, dispatch] = useReducer(inputReducer, {
-    value: "",
-    isValid: false,
+    value: inputValue || "", 
+    isValid: valid || false,
     isTouched: false,
   });
 
