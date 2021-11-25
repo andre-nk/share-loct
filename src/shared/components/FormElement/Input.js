@@ -92,7 +92,7 @@ export default function Input({
     <div>
       {inputElement}
       {!inputState.isValid && inputState.isTouched && errorMessage && (
-        <p className="mb-4 italic text-danger-light font-light text-sm">
+        <p className="mb-4 mt-1 italic text-danger-light font-light text-sm">
           *{errorMessage}
         </p>
       )}

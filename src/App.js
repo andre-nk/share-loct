@@ -6,14 +6,15 @@ import NewPlace from "./places/pages/NewPlace";
 import UserPlaces from "./places/pages/UserPlaces";
 import Landing from "./shared/pages/Landing/Landing";
 import UpdatePlace from "./places/pages/UpdatePlace";
-import MainNavigation from "./shared/components/Navigation/MainNavigation";
+import NavigationBar from "./shared/components/Navigation/NavigationBar";
+import Auth from "./user/pages/Auth";
 
 function App() {
   return (
     <BrowserRouter>
-      <MainNavigation />
+      <NavigationBar />
       <Landing />
-      <div className="py-10 px-8 lg:px-32">
+      <div className="py-10 px-4 lg:px-32">
         <Switch>
           <Route exact path="/">
             <Users />
@@ -26,6 +27,9 @@ function App() {
           </Route>
           <Route path="/places/:placeId">
             <UpdatePlace />
+          </Route>
+          <Route path="/auth">
+            <Auth />
           </Route>
           <Redirect to="/" />
         </Switch>
