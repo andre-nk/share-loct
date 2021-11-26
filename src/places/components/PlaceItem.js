@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+
+import { AuthContext } from "../../shared/context/AuthContext";
 import MapBox from "../../shared/components/UIElement/MapBox";
 import {
   AiOutlineEdit,
@@ -9,6 +11,7 @@ import {
 import Modal from "../../shared/components/UIElement/Modal";
 
 export default function PlaceItem({ place }) {
+  const auth = useContext(AuthContext);
   const history = useHistory();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
@@ -50,8 +53,12 @@ export default function PlaceItem({ place }) {
           </React.Fragment>
         }
       >
-        <p className="text-xl font-semibold font-serif text-center">Delete {place.title}?</p>
-        <p className="text-center">You won't be able to recover this post afterward</p>
+        <p className="text-xl font-semibold font-serif text-center">
+          Delete {place.title}?
+        </p>
+        <p className="text-center">
+          You won't be able to recover this post afterward
+        </p>
       </Modal>
       <div className="w-full h-auto flex flex-col-reverse lg:flex lg:flex-row justify-between lg:space-x-16 bg-white-main border-black-main border py-5 px-4 lg:py-14 lg:px-16">
         <div className="w-full mt-6 lg:mt-0 lg:w-5/12 flex flex-col justify-between space-y-12">
@@ -95,25 +102,30 @@ export default function PlaceItem({ place }) {
       </div>
       <div className="mt-8 w-full flex space-x-8 justify-end">
         <button
-          onClick={() => {
-            history.push(`/places/${place.id}`);
-          }}
-          className="border border-black-main bg-white-sub hover:bg-black-main text-black-main hover:text-white-main duration-200 px-3.5 py-3.5"
-        >
-          <AiOutlineEdit className="text-xl" />
-        </button>
-        <button
           onClick={() => {}}
-          className="border border-black-main bg-white-sub hover:bg-black-main text-black-main hover:text-white-main duration-200 px-3.5 py-3.5"
+          className="border self-end border-black-main bg-white-sub hover:bg-black-main text-black-main hover:text-white-main duration-200 px-3.5 py-3.5"
         >
           <AiOutlineShareAlt className="text-xl" />
         </button>
-        <button
-          onClick={openConfirmModal}
-          className="border border-black-main bg-white-sub hover:bg-danger-light text-black-main hover:text-white-main duration-200 px-3.5 py-3.5"
-        >
-          <AiOutlineDelete className="text-xl" />
-        </button>
+        {auth.isLoggedIn && (
+          <div className="flex space-x-8 justify-end">
+            <button
+              onClick={() => {
+                history.push(`/places/${place.id}`);
+              }}
+              className="border border-black-main bg-white-sub hover:bg-black-main text-black-main hover:text-white-main duration-200 px-3.5 py-3.5"
+            >
+              <AiOutlineEdit className="text-xl" />
+            </button>
+
+            <button
+              onClick={openConfirmModal}
+              className="border border-black-main bg-white-sub hover:bg-danger-light text-black-main hover:text-white-main duration-200 px-3.5 py-3.5"
+            >
+              <AiOutlineDelete className="text-xl" />
+            </button>
+          </div>
+        )}
       </div>
     </React.Fragment>
   );

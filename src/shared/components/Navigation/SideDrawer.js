@@ -11,7 +11,7 @@ export default function SideDrawer(props) {
       mountOnEnter
       unmountOnExit
     >
-      <aside className="fixed block lg:hidden p-6 left-0 top-0 z-40 h-full w-9/12 bg-white-main shadow-2xl">
+      <aside className="fixed block lg:hidden py-6 left-0 top-0 z-40 h-full w-9/12 bg-white-main shadow-2xl">
         {props.children}
       </aside>
     </CSSTransition>

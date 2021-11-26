@@ -37,7 +37,7 @@ export default function Landing() {
             <img
               src="landing-decoration-sm.png"
               alt="landing-decoration"
-              className="absolute sm:block lg:hidden bottom-32 h-80 lg:h-135"
+              className="absolute sm:block lg:hidden bottom-12 h-80 lg:h-135"
             />
           </div>
         </div>
