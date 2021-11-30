@@ -1,10 +1,11 @@
 import React, { useState, useContext } from "react";
-import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useHistory, useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import {
   AiOutlineEdit,
   AiOutlineDelete,
   AiOutlineShareAlt,
 } from "react-icons/ai";
+import { RWebShare } from "react-web-share";
 
 import { AuthContext } from "../../shared/context/AuthContext";
 import { useHttpClient } from "../../shared/hooks/http-hook";
@@ -15,6 +16,7 @@ import CustomLoader from "../../shared/components/UIElement/Loader";
 export default function PlaceItem({ place }) {
   const auth = useContext(AuthContext);
   const history = useHistory();
+  const location = useLocation();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showMap, setShowMap] = useState(false);
   const { isLoading, sendRequest } = useHttpClient();
@@ -36,17 +38,15 @@ export default function PlaceItem({ place }) {
     setShowMap(false);
   };
 
-  const confirmDeleteHandler =  async () => {
+  const confirmDeleteHandler = async () => {
     try {
       closeConfirmModal();
       await sendRequest(
         `http://localhost:2000/api/places/${place.id}`,
-        "DELETE",
+        "DELETE"
       );
       window.location.reload();
-    } catch (err) {
-
-    }
+    } catch (err) {}
   };
 
   return (
@@ -136,12 +136,19 @@ export default function PlaceItem({ place }) {
         </div>
       </div>
       <div className="mt-8 w-full flex space-x-8 justify-end">
-        <button
-          onClick={() => {}}
-          className="border self-end border-black-main bg-white-sub hover:bg-black-main text-black-main hover:text-white-main duration-200 px-3.5 py-3.5"
+        <RWebShare
+          data={{
+            text: `Check out ${place.title} photos only on ShareLoct`,
+            url: location.pathname,
+            title: `Share ${place.title}?`,
+          }}
         >
-          <AiOutlineShareAlt className="text-xl" />
-        </button>
+          <button
+            className="border self-end border-black-main bg-white-sub hover:bg-black-main text-black-main hover:text-white-main duration-200 px-3.5 py-3.5"
+          >
+            <AiOutlineShareAlt className="text-xl" />
+          </button>
+        </RWebShare>
         {place.creator === auth.userInstance.id && (
           <div className="flex space-x-8 justify-end">
             <button
