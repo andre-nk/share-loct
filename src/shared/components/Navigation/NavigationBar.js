@@ -18,9 +18,10 @@ export default function MainNavigation() {
     history.push("/auth");
   };
 
-  const handleSignupRoute = () => {
-    history.push("/auth/signup");
-  };
+  const handleLogoutRoute = () => {
+    auth.logout();
+    history.push("/auth");
+  }
 
   const MainNavbar = () => {
     return (
@@ -92,7 +93,7 @@ export default function MainNavigation() {
           {auth.isLoggedIn ? (
             <div className="px-6 w-full">
               <button
-                onClick={handleLoginRoute}
+                onClick={handleLogoutRoute}
                 className="bg-white-main w-full hover:bg-black-main duration-200 hover:text-white-main border border-black-main text-black-main py-2.5"
               >
                 Log out
@@ -107,7 +108,7 @@ export default function MainNavigation() {
                 Log in
               </button>
               <button
-                onClick={handleSignupRoute}
+                onClick={handleLogoutRoute}
                 className="bg-black-main w-full border-black-main text-white-main py-2.5"
               >
                 Sign up
