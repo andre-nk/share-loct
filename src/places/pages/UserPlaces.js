@@ -1,41 +1,64 @@
-import React from "react";
-import { useParams } from "react-router-dom";
-import PlaceList from "../components/PlaceList";
+import React, { useEffect, useState } from "react";
+import { useParams, useHistory } from "react-router-dom";
+import Loader from "react-loader-spinner";
 
-const DUMMY_PLACES = [
-  {
-    id: "p1",
-    title: "Empire State Building",
-    description: "One of the most famous sky scrapers in the world!",
-    imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg",
-    address: "20 W 34th St, New York, NY 10001, USA",
-    location: {
-      lat: 40.7484405,
-      lng: -73.9878584,
-    },
-    creator: "u1",
-  },
-  {
-    id: "p2",
-    title: "Empire State Building",
-    description: "One of the most famous sky scrapers in the world!",
-    imageUrl:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg",
-    address: "20 W 34th St, New York, NY 10001, USA",
-    location: {
-      lat: 40.7484405,
-      lng: -73.9878584,
-    },
-    creator: "u2",
-  },
-];
+import PlaceList from "../components/PlaceList";
+import { useHttpClient } from "../../shared/hooks/http-hook";
+import ErrorState from "../../shared/pages/Error/ErrorState";
 
 export default function UserPlaces() {
+  const { isLoading, isError, sendRequest } = useHttpClient();
+  const [isPlaces, setIsPlaces] = useState([]);
   const userId = useParams().userId;
-  const userLocations = DUMMY_PLACES.filter(
-    (place) => place.creator === userId
-  );
+  const history = useHistory();
 
-  return <PlaceList items={userLocations} />;
+  useEffect(() => {
+    const fetchPlaces = async () => {
+      try {
+        const responseData = await sendRequest(
+          `http://localhost:2000/api/places/user/${userId}`
+        );
+        setIsPlaces(responseData.places);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchPlaces();
+  }, [sendRequest, userId]);
+
+  console.log(isLoading);
+
+  return (
+    <div className="w-full">
+      {isLoading ? (
+        <div className="w-full h-full flex justify-center items-center">
+          <Loader
+            type="Rings"
+            color="#23C08C"
+            height={150}
+            width={150}
+            visible={isLoading}
+          />
+        </div>
+      ) : isError || isPlaces.length <= 0 ? (
+        <ErrorState
+          title={isPlaces.length <= 0 ? "No places yet!" : "Failed to load places."}
+          message={
+            isPlaces.length <= 0
+              ? "Let's post something for yourself, will you?"
+              : "Please try reloading this page"
+          }
+          btnMessage={isPlaces.length <= 0 ? "Create post now!" : "Try again"}
+          onClick={() => {
+            isPlaces.length <= 0 ? history.push("/places/new") : window.location.reload();
+          }}
+        />
+      ) : (
+        <div>
+          <PlaceList items={isPlaces} />
+        </div>
+      )}
+    </div>
+  );
 }

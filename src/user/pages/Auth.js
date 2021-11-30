@@ -10,12 +10,11 @@ import {
 import { AuthContext } from "../../shared/context/AuthContext";
 import CustomLoader from "../../shared/components/UIElement/Loader";
 import ErrorMessage from "../../shared/components/FormElement/ErrorMessage";
+import { useHttpClient } from "../../shared/hooks/http-hook";
 
 export default function Auth() {
   const auth = useContext(AuthContext);
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(null);
   const [formState, inputHandler, setFormData] = useForm(
     {
       email: {
@@ -29,57 +28,45 @@ export default function Auth() {
     },
     false
   );
+  const { isLoading, isError, sendRequest, clearError } = useHttpClient();
 
   const authSubmitHandler = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
 
     if (isLoginMode) {
       try {
-        const response = await fetch("http://localhost:2000/api/users/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+        const responseData = await sendRequest(
+          "http://localhost:2000/api/users/login",
+          "POST",
+          JSON.stringify({
             email: formState.inputs.email.value,
-            password: formState.inputs.password.value
+            password: formState.inputs.password.value,
           }),
-        });
-        const responseData = await response.json();
+          {
+            "Content-Type": "application/json",
+          }
+        );
 
-        if (response.ok) {
-          setIsLoading(false);
-          auth.login();
-        } else {
-          setIsLoading(false);
-          setIsError(responseData.message);
-        }
+        auth.login(responseData.user);
       } catch (err) {
         console.log(err);
       }
     } else {
       try {
-        const response = await fetch("http://localhost:2000/api/users/signup", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+        const responseData = await sendRequest(
+          "http://localhost:2000/api/users/signup",
+          "POST",
+          JSON.stringify({
             name: formState.inputs.name.value,
             email: formState.inputs.email.value,
             password: formState.inputs.password.value,
           }),
-        });
-        const responseData = await response.json();
+          {
+            "Content-Type": "application/json",
+          }
+        );
 
-        if (response.ok) {
-          setIsLoading(false);
-          auth.login();
-        } else {
-          setIsLoading(false);
-          setIsError(responseData.message);
-        }
+        auth.login(responseData.user);
       } catch (err) {
         console.log(err);
       }
@@ -87,7 +74,7 @@ export default function Auth() {
   };
 
   const switchModeHandler = (e) => {
-    setIsError(null);
+    clearError(null);
     if (!isLoginMode) {
       setFormData(
         {
@@ -152,8 +139,8 @@ export default function Auth() {
               placeholder="Password"
               type="password"
               element="input"
-              validators={[VALIDATOR_MINLENGTH(5)]}
-              errorMessage="Please enter a valid password (at least 5 characters)"
+              validators={[VALIDATOR_MINLENGTH(6)]}
+              errorMessage="Please enter a valid password (at least 6 characters)"
               onInput={inputHandler}
             />
             <button

@@ -13,13 +13,16 @@ import NavigationBar from "./shared/components/Navigation/NavigationBar";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userInstance, setUserInstance ] = useState(null);
 
-  const login = useCallback(() => {
+  const login = useCallback((user) => {
     setIsLoggedIn(true);
+    setUserInstance(user)
   }, []);
 
   const logout = useCallback(() => {
     setIsLoggedIn(false);
+    setUserInstance(null)
   }, []);
 
   let routes;
@@ -91,6 +94,7 @@ function App() {
     <AuthContext.Provider
       value={{
         isLoggedIn,
+        userInstance: userInstance,
         login,
         logout,
       }}
@@ -98,7 +102,7 @@ function App() {
       <BrowserRouter>
         <NavigationBar />
         <Landing />
-        <div className="py-10 px-4 lg:px-32">{routes}</div>
+        <div className="py-10 px-8 lg:px-32">{routes}</div>
       </BrowserRouter>
     </AuthContext.Provider>
   );

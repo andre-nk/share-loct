@@ -23,7 +23,7 @@ export default function MapBox({ center, zoom }){
       ref={mapRef}
       className="w-full h-full border border-dashed border-gray-main p-2 bg-white-sub"
       id="map"
-    ></div>
+    />
   );
 };
  

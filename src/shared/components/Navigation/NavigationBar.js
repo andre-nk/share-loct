@@ -21,7 +21,7 @@ export default function MainNavigation() {
   const handleLogoutRoute = () => {
     auth.logout();
     history.push("/auth");
-  }
+  };
 
   const MainNavbar = () => {
     return (
@@ -48,7 +48,11 @@ export default function MainNavigation() {
               >
                 Log out
               </button>
-              <NavigationLink path="/u1/places" content="My places" />
+              {
+                auth.userInstance && (
+                  <NavigationLink path={`/${auth.userInstance.id}/places`} content="My places" />
+                )
+              }
               <Link to="/places/new">
                 <AiOutlinePlusCircle size={24} />
               </Link>
@@ -82,14 +86,22 @@ export default function MainNavigation() {
           className="flex flex-col justify-between content-between h-full"
           onClick={() => setIsDrawerOpen(false)}
         >
-          <nav>
-            <NavigationLink path="/u1/places" content="My places" />
-            <NavigationLink
-              last={true}
-              path="/places/new"
-              content="Add a new place"
-            />
-          </nav>
+          {auth.isLoggedIn && (
+            <div className="flex flex-col">
+              {
+                auth.userInstance && (
+                  <NavigationLink path={`/${auth.userInstance.id}/places`} content="My places" />
+                )
+              }
+              <nav>
+                <NavigationLink
+                  last={true}
+                  path="/places/new"
+                  content="Add a new place"
+                />
+              </nav>
+            </div>
+          )}
           {auth.isLoggedIn ? (
             <div className="px-6 w-full">
               <button

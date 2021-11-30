@@ -1,19 +1,23 @@
 import React, { useState, useContext } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-
-import { AuthContext } from "../../shared/context/AuthContext";
-import MapBox from "../../shared/components/UIElement/MapBox";
 import {
   AiOutlineEdit,
   AiOutlineDelete,
   AiOutlineShareAlt,
 } from "react-icons/ai";
+
+import { AuthContext } from "../../shared/context/AuthContext";
+import { useHttpClient } from "../../shared/hooks/http-hook";
+import MapBox from "../../shared/components/UIElement/MapBox";
 import Modal from "../../shared/components/UIElement/Modal";
+import CustomLoader from "../../shared/components/UIElement/Loader";
 
 export default function PlaceItem({ place }) {
   const auth = useContext(AuthContext);
   const history = useHistory();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showMap, setShowMap] = useState(false);
+  const { isLoading, sendRequest } = useHttpClient();
 
   const openConfirmModal = () => {
     setShowConfirmModal(true);
@@ -23,12 +27,54 @@ export default function PlaceItem({ place }) {
     setShowConfirmModal(false);
   };
 
-  const confirmDeleteHandler = () => {
-    console.log("deleting...");
+  const openMapModal = () => {
+    console.log(place.location);
+    setShowMap(true);
+  };
+
+  const closeMapModal = () => {
+    setShowMap(false);
+  };
+
+  const confirmDeleteHandler =  async () => {
+    try {
+      closeConfirmModal();
+      await sendRequest(
+        `http://localhost:2000/api/places/${place.id}`,
+        "DELETE",
+      );
+      window.location.reload();
+    } catch (err) {
+
+    }
   };
 
   return (
     <React.Fragment>
+      <CustomLoader isLoading={isLoading} />
+      <Modal
+        show={showMap}
+        onCancel={closeMapModal}
+        headerClass="w-full"
+        contentClass="p-8 flex flex-col justify-center items-center space-y-3"
+        className="z-50 fixed bg-white-main inset-x-8 lg:inset-x-1/4 top-1/3"
+        footerClass="flex justify-center space-x-8 px-8 pb-8"
+        footer={
+          <React.Fragment>
+            <button
+              onClick={closeMapModal}
+              className="block border border-black-main bg-white-sub hover:bg-black-main text-black-main hover:text-white-main duration-200 w-full pt-2 pb-2.5 px-7"
+            >
+              Close
+            </button>
+          </React.Fragment>
+        }
+      >
+        <p className="text-xl font-semibold font-serif text-center">
+          {place.title} Map View
+        </p>
+        <MapBox zoom={10} center={place.location} />
+      </Modal>
       <Modal
         show={showConfirmModal}
         onCancel={closeConfirmModal}
@@ -66,9 +112,6 @@ export default function PlaceItem({ place }) {
             <h2 className="font-serif font-bold text-xl lg:text-3xl">
               {place.title}
             </h2>
-            <p className="mt-1.5 text-sm lg:text-md">
-              posted by: <span className="font-medium">{place.creator}</span>
-            </p>
             <p className="mt-4 text-sm lg:text-md w-auto text-black-main">
               {place.description}
             </p>
@@ -77,17 +120,9 @@ export default function PlaceItem({ place }) {
             </p>
             <p className="text-sm w-full">{place.address}</p>
           </div>
-          <div className="h-full hidden lg:block">
-            <MapBox zoom={10} center={place.location} />
-          </div>
           <button
-            onClick={() =>
-              window.open(
-                `https://maps.google.com/?q=${place.location.lat},${place.location.lng}`,
-                "_blank"
-              )
-            }
-            className="block lg:hidden border border-black-main bg-white-sub hover:bg-black-main text-black-main hover:text-white-main duration-200 w-full pt-2 pb-2.5 px-7"
+            onClick={openMapModal}
+            className="block border border-black-main bg-white-sub hover:bg-black-main text-black-main hover:text-white-main duration-200 w-full pt-2 pb-2.5 px-7"
           >
             Show on Maps
           </button>
@@ -95,7 +130,7 @@ export default function PlaceItem({ place }) {
         <div className="w-full lg:w-7/12 p-2 border border-dashed border-gray-main bg-white-sub">
           <img
             className="object-cover w-full"
-            src={place.imageUrl}
+            src={place.image}
             alt={place.title}
           />
         </div>
@@ -107,7 +142,7 @@ export default function PlaceItem({ place }) {
         >
           <AiOutlineShareAlt className="text-xl" />
         </button>
-        {auth.isLoggedIn && (
+        {place.creator === auth.userInstance.id && (
           <div className="flex space-x-8 justify-end">
             <button
               onClick={() => {
