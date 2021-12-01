@@ -130,7 +130,7 @@ export default function PlaceItem({ place }) {
         <div className="w-full lg:w-7/12 p-2 border border-dashed border-gray-main bg-white-sub">
           <img
             className="object-cover w-full"
-            src={place.image}
+            src={"http://localhost:2000/" + place.image}
             alt={place.title}
           />
         </div>

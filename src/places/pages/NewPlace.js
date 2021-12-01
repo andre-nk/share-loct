@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import { AiOutlinePicture } from "react-icons/ai";
 import { useHistory } from "react-router-dom";
 
 import { useForm } from "../../shared/hooks/form-hook";
@@ -12,6 +11,7 @@ import { useHttpClient } from "../../shared/hooks/http-hook";
 import { AuthContext } from "../../shared/context/AuthContext";
 import CustomLoader from "../../shared/components/UIElement/Loader";
 import ErrorMessage from "../../shared/components/FormElement/ErrorMessage";
+import ImageUpload from "../../shared/components/FormElement/ImageUpload";
 
 export default function NewPlace() {
   const history = useHistory();
@@ -35,19 +35,13 @@ export default function NewPlace() {
     event.preventDefault();
 
     try {
-      await sendRequest(
-        "http://localhost:2000/api/places/",
-        "POST",
-        JSON.stringify({
-          title: formState.inputs.title.value,
-          description: formState.inputs.description.value,
-          address: formState.inputs.address.value,
-          creator: auth.userInstance.id,
-        }),
-        {
-          "Content-Type": "application/json",
-        }
-      );
+      const formData = new FormData();
+      formData.append("title", formState.inputs.title.value);
+      formData.append("description", formState.inputs.description.value);
+      formData.append("image", formState.inputs.image.value);
+      formData.append("address", formState.inputs.address.value);
+      formData.append("creator", auth.userInstance.id);
+      await sendRequest("http://localhost:2000/api/places/", "POST", formData);
 
       history.push("/");
     } catch (err) {
@@ -61,7 +55,7 @@ export default function NewPlace() {
       <div className="w-full h-auto flex flex-col-reverse lg:flex lg:flex-row justify-between lg:space-x-16 bg-white-main border-black-main border py-5 px-4 lg:py-14 lg:px-16">
         <form
           onSubmit={placeSubmitHandler}
-          className="w-full mt-6 lg:mt-0 lg:w-5/12 flex flex-col justify-between"
+          className="w-full mt-6 lg:mt-0 lg:w-6/12 flex flex-col justify-between"
         >
           <Input
             id="title"
@@ -74,10 +68,11 @@ export default function NewPlace() {
             onInput={inputHandler}
           />
 
-          {/* fetch user name here... */}
           <p className="text-sm lg:text-md px-4 lg:px-0">
-            posted by: <span className="font-medium">{auth.userInstance.name}</span>
+            posted by:{" "}
+            <span className="font-medium">{auth.userInstance.name}</span>
           </p>
+
           <Input
             id="description"
             rows={8}
@@ -91,6 +86,7 @@ export default function NewPlace() {
           <p className="border-t text-sm font-medium mx-4 lg:mx-0 border-gray-main pt-3 pb-2">
             Location's Address:
           </p>
+
           <Input
             id="address"
             element="input"
@@ -100,22 +96,21 @@ export default function NewPlace() {
             placeholder={"Enter the location's address here..."}
             className="text-sm outline-none px-4 lg:px-0 caret-black w-full pb-3.5"
           />
+
           <button
             type="submit"
             disabled={!formState.isValid}
-            className="bg-black-main mt-6 py-3 mb-8 text-white-main disabled:opacity-40"
+            className="bg-black-main mt-6 py-3 text-white-main disabled:opacity-40"
           >
             Create post
           </button>
-          <ErrorMessage isError={isError} />
+          <div className="mt-8">
+            <ErrorMessage isError={isError} />
+          </div>
         </form>
-        <div className="w-full flex justify-center items-center h-64 lg:h-auto lg:w-7/12 p-2 border border-dashed border-gray-main bg-white-sub">
-          <span className="flex flex-col justify-center space-y-4 items-center">
-            <AiOutlinePicture className="text-3xl text-gray-main" />
-            <h2 className="text-center text-gray-main">
-              Add the location's photos here...
-            </h2>
-          </span>
+
+        <div className="lg:w-5/12">
+          <ImageUpload id="image" onInput={inputHandler} />
         </div>
       </div>
     </React.Fragment>

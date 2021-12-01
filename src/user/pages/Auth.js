@@ -8,6 +8,7 @@ import {
   VALIDATOR_REQUIRE,
 } from "../../shared/utils/validators";
 import { AuthContext } from "../../shared/context/AuthContext";
+import ImageUpload from "../../shared/components/FormElement/ImageUpload";
 import CustomLoader from "../../shared/components/UIElement/Loader";
 import ErrorMessage from "../../shared/components/FormElement/ErrorMessage";
 import { useHttpClient } from "../../shared/hooks/http-hook";
@@ -53,17 +54,15 @@ export default function Auth() {
       }
     } else {
       try {
+        const formData = new FormData();
+        formData.append("name", formState.inputs.name.value);
+        formData.append("image", formState.inputs.image.value);
+        formData.append("email", formState.inputs.email.value);
+        formData.append("password", formState.inputs.password.value);
         const responseData = await sendRequest(
           "http://localhost:2000/api/users/signup",
           "POST",
-          JSON.stringify({
-            name: formState.inputs.name.value,
-            email: formState.inputs.email.value,
-            password: formState.inputs.password.value,
-          }),
-          {
-            "Content-Type": "application/json",
-          }
+          formData
         );
 
         auth.login(responseData.user);
@@ -79,6 +78,8 @@ export default function Auth() {
       setFormData(
         {
           ...formState.inputs,
+          name: undefined,
+          image: undefined,
         },
         formState.inputs.email.isValid && formState.inputs.password.isValid
       );
@@ -88,6 +89,10 @@ export default function Auth() {
           ...formState.inputs,
           name: {
             value: "",
+            isValid: false,
+          },
+          image: {
+            value: null,
             isValid: false,
           },
         },
@@ -109,6 +114,11 @@ export default function Auth() {
             and become a certified virtual wanderluster...
           </p>
           <form onSubmit={authSubmitHandler} className="w-full px-6 mt-8">
+            {!isLoginMode && (
+              <div className="mb-6">
+                <ImageUpload isMini={true} id="image" onInput={inputHandler} />
+              </div>
+            )}
             {!isLoginMode && (
               <Input
                 className="w-full border border-black-main py-3.5 px-4 text-sm lg:text-base"

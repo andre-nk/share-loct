@@ -4,7 +4,7 @@ export default function UserCard({ user }) {
   return (
     <div className="p-4 border border-black-main bg-white-main hover:bg-gray-100 h-32 w-full flex justify-start space-x-5 hover:scale-101 duration-200 transform">
       <img
-        src={user.image}
+        src={"http://localhost:2000/" + user.image}
         alt={user.name + " avatar"}
         className="object-cover"
       />
