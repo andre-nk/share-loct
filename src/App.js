@@ -1,5 +1,5 @@
 import { Helmet } from "react-helmet";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import Auth from "./user/pages/Auth";
@@ -12,22 +12,34 @@ import { AuthContext } from "./shared/context/AuthContext";
 import NavigationBar from "./shared/components/Navigation/NavigationBar";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userInstance, setUserInstance ] = useState(null);
+  const [token, setToken] = useState(null);
+  const [userInstance, setUserInstance] = useState(null);
 
-  const login = useCallback((user) => {
-    setIsLoggedIn(true);
-    setUserInstance(user)
+  const login = useCallback((id, name, token) => {
+    setToken(token);
+    localStorage.setItem("userInstance", JSON.stringify({ id, token, name }));
+    setUserInstance({
+      id,
+      name,
+    });
   }, []);
 
   const logout = useCallback(() => {
-    setIsLoggedIn(false);
-    setUserInstance(null)
+    setToken(null);
+    setUserInstance(null);
+    localStorage.removeItem("userInstance");
   }, []);
+
+  useEffect(() => {
+    const storedToken = JSON.parse(localStorage.getItem("userInstance"));
+    if (storedToken && storedToken.token) {
+      login(storedToken.id, storedToken.name, storedToken.token);
+    }
+  }, [login]);
 
   let routes;
 
-  if (isLoggedIn) {
+  if (token) {
     routes = (
       <Switch>
         <Route exact path="/">
@@ -93,7 +105,8 @@ function App() {
   return (
     <AuthContext.Provider
       value={{
-        isLoggedIn,
+        isLoggedIn: !!token,
+        token: token,
         userInstance: userInstance,
         login,
         logout,

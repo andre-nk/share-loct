@@ -43,7 +43,11 @@ export default function PlaceItem({ place }) {
       closeConfirmModal();
       await sendRequest(
         `http://localhost:2000/api/places/${place.id}`,
-        "DELETE"
+        "DELETE",
+        null,
+        {
+          Authorization: "Bearer " + auth.token,
+        }
       );
       window.location.reload();
     } catch (err) {}
@@ -149,7 +153,7 @@ export default function PlaceItem({ place }) {
             <AiOutlineShareAlt className="text-xl" />
           </button>
         </RWebShare>
-        {place.creator === auth.userInstance.id && (
+        {(auth.userInstance !== null && place.creator === auth.userInstance.id) && (
           <div className="flex space-x-8 justify-end">
             <button
               onClick={() => {

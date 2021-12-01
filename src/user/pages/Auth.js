@@ -48,7 +48,7 @@ export default function Auth() {
           }
         );
 
-        auth.login(responseData.user);
+        auth.login(responseData.userId, responseData.name, responseData.token);
       } catch (err) {
         console.log(err);
       }
@@ -65,7 +65,7 @@ export default function Auth() {
           formData
         );
 
-        auth.login(responseData.user);
+        auth.login(responseData.userId, responseData.name, responseData.token);
       } catch (err) {
         console.log(err);
       }

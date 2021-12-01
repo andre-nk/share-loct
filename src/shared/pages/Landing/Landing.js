@@ -8,7 +8,14 @@ export default function Landing() {
   if (location.pathname === "/") {
     return (
       <div className="w-full h-screen overflow-hidden">
-        <img src="/stamp.png" alt="stamp" className="hidden lg:block absolute left-0 bottom-12 h-44"/>
+        <img
+          src="/stamp.png"
+          alt="stamp"
+          className="hidden lg:block absolute left-0 h-44"
+          style={{
+            top: "55%",
+          }}
+        />
         <div className="flex flex-col lg:flex-row w-full h-full lg:h-96 items-center justify-between absolute top-20">
           <div className="mx-8 md:mx-16 flex flex-col items-center lg:block lg:ml-40 mt-12">
             <h2 className="text-2xl lg:text-4xl font-serif font-bold">

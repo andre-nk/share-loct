@@ -62,7 +62,7 @@ export default function UpdatePlace() {
 
   const submitHandler = async (event) => {
     event.preventDefault();
-    try{
+    try {
       await sendRequest(
         `http://localhost:2000/api/places/${placeId}`,
         "PATCH",
@@ -72,24 +72,19 @@ export default function UpdatePlace() {
         }),
         {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + auth.token,
         }
       );
 
       history.push(`/${auth.userInstance.id}/places`);
-    } catch (err){
-
-    }
-  }; 
+    } catch (err) {}
+  };
 
   if (!identifiedPlace) {
     return (
       <ErrorState
-        title={
-          "Failed to load this place."
-        }
-        message={
-          "Please try reloading this page"
-        }
+        title={"Failed to load this place."}
+        message={"Please try reloading this page"}
         btnMessage={"Try again"}
         onClick={() => {
           window.location.reload();
@@ -97,8 +92,6 @@ export default function UpdatePlace() {
       />
     );
   }
-
-  console.log(isLoading);
 
   return (
     <React.Fragment>
@@ -124,7 +117,8 @@ export default function UpdatePlace() {
 
             {/* fetch user name here... */}
             <p className="text-sm lg:text-md px-4 lg:px-0">
-              posted by: <span className="font-medium">Jesse Pinkman</span>
+              posted by:{" "}
+              <span className="font-medium">{auth.userInstance.name}</span>
             </p>
             <Input
               rows={8}
@@ -144,13 +138,15 @@ export default function UpdatePlace() {
             >
               Update post
             </button>
-            <ErrorMessage isError={isError} />
+            <div className="mt-8">
+              <ErrorMessage isError={isError} />
+            </div>
           </form>
         )}
         <div className="w-full flex justify-center items-center h-64 lg:h-auto lg:w-7/12 p-2 border border-dashed border-gray-main bg-white-sub">
           <img
             className="object-cover w-full h-full"
-            src={identifiedPlace.image}
+            src={"http://localhost:2000/" + identifiedPlace.image}
             alt={identifiedPlace.title}
           />
         </div>

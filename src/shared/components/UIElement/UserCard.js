@@ -6,6 +6,10 @@ export default function UserCard({ user }) {
       <img
         src={"http://localhost:2000/" + user.image}
         alt={user.name + " avatar"}
+        style={{
+          width: "6rem",
+          height: "6rem",
+        }}
         className="object-cover"
       />
       <div className="flex flex-col justify-between py-1.5">
