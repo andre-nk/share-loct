@@ -42,7 +42,7 @@ export default function PlaceItem({ place }) {
     try {
       closeConfirmModal();
       await sendRequest(
-        `http://localhost:2000/api/places/${place.id}`,
+        process.env.REACT_APP_BACKEND_URL + `/places/${place.id}`,
         "DELETE",
         null,
         {
@@ -134,7 +134,7 @@ export default function PlaceItem({ place }) {
         <div className="w-full lg:w-7/12 p-2 border border-dashed border-gray-main bg-white-sub">
           <img
             className="object-cover w-full"
-            src={"http://localhost:2000/" + place.image}
+            src={process.env.REACT_APP_ASSET_URL + place.image}
             alt={place.title}
           />
         </div>

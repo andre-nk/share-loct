@@ -38,7 +38,7 @@ export default function UpdatePlace() {
     const fetchPlace = async () => {
       try {
         const responseData = await sendRequest(
-          `http://localhost:2000/api/places/${placeId}`
+          process.env.REACT_APP_BACKEND_URL + `/places/${placeId}`
         );
         setIdentifiedPlace(responseData.place);
         setFormData(
@@ -64,7 +64,7 @@ export default function UpdatePlace() {
     event.preventDefault();
     try {
       await sendRequest(
-        `http://localhost:2000/api/places/${placeId}`,
+        process.env.REACT_APP_BACKEND_URL + `/places/${placeId}`,
         "PATCH",
         JSON.stringify({
           title: formState.inputs.title.value,
@@ -146,7 +146,7 @@ export default function UpdatePlace() {
         <div className="w-full flex justify-center items-center h-64 lg:h-auto lg:w-7/12 p-2 border border-dashed border-gray-main bg-white-sub">
           <img
             className="object-cover w-full h-full"
-            src={"http://localhost:2000/" + identifiedPlace.image}
+            src={process.env.REACT_APP_ASSET_URL + identifiedPlace.image}
             alt={identifiedPlace.title}
           />
         </div>

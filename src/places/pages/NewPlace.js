@@ -42,7 +42,7 @@ export default function NewPlace() {
       formData.append("address", formState.inputs.address.value);
       formData.append("creator", auth.userInstance.id);
       await sendRequest(
-        "http://localhost:2000/api/places/",
+        process.env.REACT_APP_BACKEND_URL + "/places/",
         "POST",
         formData,
         {
