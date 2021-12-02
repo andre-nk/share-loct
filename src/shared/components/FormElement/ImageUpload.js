@@ -67,7 +67,7 @@ export default function ImageUpload(props) {
               className="object-cover m-0.5 sm:h-64 lg:h-full"
             />
           ) : (
-            <p className="font-light px-1 w-full h-full bg-red-50 cursor-pointer text-gray-main text-caption text-center select-none duration-200">
+            <p className={`font-light text-sm lg:text-lg px-1 w-full h-full cursor-pointer text-gray-main text-center select-none duration-200`}>
               Please pick an image
             </p>
           )}
